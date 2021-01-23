@@ -1,24 +1,70 @@
-# README
+# アプリケーション名
+Share_app
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# アプリケーション概要
+- 他のユーザーと予定の共有ができます。
+- 他のユーザーの予定に対してコメントをすることができます。
+- 自身の予定管理にも使えます。
 
-Things you may want to cover:
+# URL
+未実装
 
-* Ruby version
+# テスト用アカウント
+未実装
 
-* System dependencies
+# データベース設計
 
-* Configuration
 
-* Database creation
+# テーブル設計
 
-* Database initialization
+## users テーブル
 
-* How to run the test suite
+| Column                  | Type   | Options                  |
+| ----------------------- | ------ | ------------------------ |
+| nickname                | string | null: false              |
+| email                   | string | null: false, unique:true |
+| encrypted_password      | string | null: false              |
+| last_name               | string | null: false              |
+| first_name              | string | null: false              |
+| lname_kana              | string | null: false              |
+| fname_kana              | string | null: false              |
+| birthday                | date   | null: false              |
 
-* Services (job queues, cache servers, search engines, etc.)
+### Association
 
-* Deployment instructions
+- has_one :share
+- has_many :requests
 
-* ...
+## share テーブル
+
+| Column             | Type       | Options                           |
+| ------------------ | -----------| --------------------------------- |
+| share_title        | string     | null: false, limit:20             |
+| relationship       | integer    | null: false                       |
+| detail             | text       | null: false,limit:500             |
+| start_date         | datetime   | null: false                       |
+| end_date           | datetime   | null: false                       |
+| user               | references | null: false, foreign_key:true     |
+
+<!-- imageはActiveStorageにて実装予定 -->
+
+### Association
+
+- belongs_to :user
+- has_many :requests
+
+## request テーブル
+
+| Column           | Type         | Options                        |
+| ---------------- | ------------ | ------------------------------ |
+| request_title    | string       | null: false, limit:30          |
+| content          | text         | null: false, limit:500         |
+| user             | references   | null: false, foreign_key:true  |
+| share            | references   | null: false, foreign_key:true  |
+
+<!-- imageはActiveStorageにて実装予定 -->
+
+### Association
+
+- belongs_to :user
+- belongs_to :share
